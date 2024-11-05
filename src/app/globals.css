@@ -39,15 +39,15 @@ body {
 .square {
   width: 100px;
   height: 100px;
-  font: bold 36px Arial;
+  font: bold 18px Arial;
   text-decoration: none;
   background-color: #EEEEEE;
   color: #333333;
   padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
+  border-top: 2px solid #333333;
+  border-right: 2px solid #333333;
+  border-bottom: 2px solid #333333;
+  border-left: 2px solid #333333;
 }
 
 .selected {
@@ -74,6 +74,22 @@ body {
 
 .button-container {
   display: flex;
+}
+
+.rectangular-button {
+  width: 50px;
+  height: 30px;
+  font-size: 16px;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Slightly rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.rectangular-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
 }
 
 .score {

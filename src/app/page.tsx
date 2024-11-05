@@ -2,6 +2,7 @@
 import React from 'react'
 
 import { Coordinate, Model, Square } from '../model'
+import { isNull } from 'util'
 
 export default function Home() {
   // initial instantiation of the Model comes from the first configuration
@@ -15,10 +16,14 @@ export default function Home() {
 
   // ((target.row + 1) === (selected.row))
   function isValidMove(selected:Coordinate, target:Coordinate) {
-    if ((((selected.row - 1) === (target.row)) && (selected.column === target.column) // UP
+    if ((
+       (((selected.row - 1) === (target.row)) && (selected.column === target.column) // UP
     || (((selected.row + 1) === (target.row)) && (selected.column === target.column)) // DOWN
     || ((selected.row === target.row) && ((selected.column - 1) === target.column)) // LEFT
-    || ((selected.row === target.row) && ((selected.column + 1) === target.column)))) // RIGHT
+    || ((selected.row === target.row) && ((selected.column + 1) === target.column))) // RIGHT
+    && (model.contents(target.row, target.column) != '') // NOT EMPTY
+    && ((model.contents(target.row, target.column) + model.contents(selected.row, selected.column)).length <= 6) 
+        )) 
     { 
       return true
     } else {
@@ -28,35 +33,32 @@ export default function Home() {
 
   
   function fold(row:number, column:number) {
-    if (model.board.selectedSquare && (model.contents(row, column) != '')) {
-      const selectedRow = model.board.selectedSquare.row
-      const selectedCol = model.board.selectedSquare.column
-      const selectedCoord = new Coordinate(selectedRow, selectedCol)
-      const targetCoord = new Coordinate(row, column)
-      const selectedContents = model.contents(selectedRow, selectedCol)
-      if (isValidMove(selectedCoord, targetCoord)) {
-        model.setcontents(selectedRow, selectedCol, '') 
-        return selectedContents
-      } else {
-        return ''
-      }
-    }
-    return ''
-  }
-
-  function handleClick(row:number, column:number) {
-    let selected = new Coordinate(row, column)
     if (model.board.selectedSquare) {
       const selectedRow = model.board.selectedSquare.row
       const selectedCol = model.board.selectedSquare.column
       const selectedCoord = new Coordinate(selectedRow, selectedCol)
       const targetCoord = new Coordinate(row, column)
-      const combinedString = fold(row,column) + model.contents(row, column) 
-      if (isValidMove(selectedCoord, targetCoord) && model.contents(row, column) != '' && (combinedString.length <= 6)){
-        model.setcontents(row, column, combinedString)
-        model.board.selectedSquare = selected
-    } else if (model.contents(row,column) != '') {
+      const foldContents = model.contents(selectedRow, selectedCol) + model.contents(row, column)
+      if (isValidMove(selectedCoord, targetCoord)) {
+        model.setcontents(selectedRow, selectedCol, '') 
+        model.setcontents(row, column, foldContents)
+        return foldContents
+      } else {
+        return null 
+      }
+    }
+    return null
+  }
+
+
+  function handleClick(row:number, column:number) {
+    let selected = new Coordinate(row, column)
+    if (!model.board.selectedSquare) {
       model.board.selectedSquare = selected
+    } else {
+      if (fold(row,column)) {
+        model.board.selectedSquare = selected
+      }
     }
     andRefreshDisplay()
   }
@@ -111,8 +113,11 @@ export default function Home() {
         </div>
       </div>
      
+      <div style={{ marginLeft: '500px', display: 'flex', flexDirection: 'column' }}>
       <label className="score">{"Score: " + "GOES HERE"}</label>
       <label className="numMoves">{"Number of Moves: " + "GOES HERE"}</label>
+    </div>
+
     </div>
   )
 }
