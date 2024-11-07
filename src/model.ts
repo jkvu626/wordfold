@@ -61,6 +61,9 @@ export class Model {
         this.board = board
     }
 
+    getConfig() {
+        return this.chosen
+    }
     contents(row:number, column:number) {
         return this.board.squares[row][column].letters
     }

@@ -2,12 +2,89 @@
 import React from 'react'
 
 import { Coordinate, Model, Square } from '../model'
-import { isNull } from 'util'
 
 export default function Home() {
   // initial instantiation of the Model comes from the first configuration
   const [model, setModel] = React.useState(new Model(0))
   const [redraw, forceRedraw] = React.useState(0)
+  const [moveCount, setMoveCount] = React.useState(0) // initialize movecount
+  const [score, setScore] = React.useState(0) // initialize score
+
+  const incrementMove = () => {
+    setMoveCount(prevCount => prevCount + 1);
+  }
+  
+  function changeConfig(config:number) {
+    setModel(new Model(config))
+    setMoveCount(0)
+    setScore(0)
+    andRefreshDisplay()
+  }
+
+  function resetConfig() {
+    let config = model.chosen
+    setModel(new Model(config))
+    setMoveCount(0)
+    setScore(0)
+    andRefreshDisplay()
+  }
+
+  function checkScore() {
+    let wordScore:number = 0
+    for (let r:number = 0; r < 5; r++) {
+      for (let c:number = 0; c < 5; c++) {
+        for (const word of model.words) {
+          let s = model.contents(r, c).length
+          if (word.includes(model.contents(r, c)) && s > 1) {
+            wordScore += s
+            break
+          }
+        }
+      }
+    }
+    setScore(wordScore)
+  }
+
+  function checkSolution() {
+    let currentWords : string[] = []
+    for (let r:number = 0; r < 5; r++) {
+      for (let c:number = 0; c < 5; c++) {
+        let contents = model.contents(r, c)
+        if (contents != '') {
+          currentWords.push(contents)
+        }
+      }
+    }
+    for (let i:number = 0; i < currentWords.length; i++) {
+      console.log(currentWords[i])
+    }
+    console.log(model.words)
+    if (areArraysEqual(currentWords, model.words)) {
+      alert("CONGRATULATIONS! SCORE: " + score + " MOVES: " + moveCount)
+    } else {
+      alert("INCORRECT SOLUTION")
+    }
+  }
+
+  // helper function to check if 2 arrays are equal
+  function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
+    // Check if lengths are different
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+  
+    arr1 = [...arr1].sort(); // Create a copy of arr1 and sort it
+    arr2 = [...arr2].sort(); // Create a copy of arr2 and sort it
+    
+    // Check if all elements are equal
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+  
+    return true;
+  }
 
   // helper function that forces React app to redraw whenever this is called.
   function andRefreshDisplay() {
@@ -42,6 +119,7 @@ export default function Home() {
       if (isValidMove(selectedCoord, targetCoord)) {
         model.setcontents(selectedRow, selectedCol, '') 
         model.setcontents(row, column, foldContents)
+        incrementMove()
         return foldContents
       } else {
         return null 
@@ -50,18 +128,20 @@ export default function Home() {
     return null
   }
 
-
   function handleClick(row:number, column:number) {
+
     let selected = new Coordinate(row, column)
-    if (!model.board.selectedSquare) {
+    if (!model.board.selectedSquare && model.contents(row, column) != '') {
       model.board.selectedSquare = selected
     } else {
       if (fold(row,column)) {
-        model.board.selectedSquare = selected
+        checkScore()
+        model.board.selectedSquare = undefined
       }
     }
     andRefreshDisplay()
   }
+
 
   // change the style for the given square based on model. Space separated string.
   // So "square" is a regular square, while "square selected" is a selected square. Find
@@ -73,8 +153,16 @@ export default function Home() {
     return "square"
   }
 
+  function configSelected(config:number) {
+    if (model.chosen === config) {
+      return "config-button-selected"
+    } 
+    return "config-button"
+  }
+
   return (
     <div>
+      <h1 className="wordfold-heading">WordFold</h1>
       <div className="board">
         <div className="button-container">
           <button data-testid="0,0" className={css(0,0)} onClick={() => handleClick(0, 0)}>{model.contents(0,0)}</button>
@@ -113,10 +201,39 @@ export default function Home() {
         </div>
       </div>
      
-      <div style={{ marginLeft: '500px', display: 'flex', flexDirection: 'column' }}>
-      <label className="score">{"Score: " + "GOES HERE"}</label>
-      <label className="numMoves">{"Number of Moves: " + "GOES HERE"}</label>
-    </div>
+      <div style={{ marginLeft: '545px', marginTop: '40px', display: 'flex', flexDirection: 'column' }}>
+        <label className="score-title">SCORE</label>
+        <label className="score">{score}</label>
+        <label className="numMoves">{"Moves: " + moveCount}</label>
+
+        {/* Label for button configuration */}
+        <label style={{ marginTop: '20px', fontWeight: 'bold' }}>Choose Configuration</label>
+
+        {/* Container for buttons with fixed width */}
+        <div style={{ width: '180px', display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
+          {/* Row for the first three blue buttons */}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className={configSelected(0)} onClick={() => changeConfig(0)}>
+              1
+            </button>
+            <button className={configSelected(1)} onClick={() => changeConfig(1)}>
+              2
+            </button>
+            <button className={configSelected(2)} onClick={() => changeConfig(2)}>
+              3
+            </button>
+          </div>
+
+          {/* RESET button spans the width of the container */}
+          <button className="reset-button" style={{ width: '100%' }} onClick={() => resetConfig()}>
+            RESET PUZZLE
+          </button>
+          <button className="reset-button" style={{ width: '100%', backgroundColor: 'green'}} onClick={() => checkSolution()}>
+            CHECK SOLUTION
+          </button>
+        </div>
+      </div>
+
 
     </div>
   )

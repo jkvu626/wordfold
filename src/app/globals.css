@@ -33,8 +33,22 @@ body {
 .board {
   position: absolute;
   left: 10px;
-  top: 10px;
+  top: 80px;
 }
+
+.wordfold-heading {
+  font-family: 'Impact', 'Arial', sans-serif; /* Bold, blocky font */
+  font-weight: bold;                        /* Ensures the text is bold */
+  font-size: 48px;                          /* Adjust the size to your liking */               /* Uppercase letters for a more impactful look */
+  letter-spacing: 5px;                      /* Adds spacing between letters */
+  color: #000000;                           /* Dark color for the text */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Shadow to add depth */
+  padding: 10px 20px;                       /* Optional: Adds some padding for better spacing */
+  background: #ecf0f1;                      /* Optional: Soft background for contrast */
+  border-radius: 10px;                      /* Optional: Rounded corners for a modern look */
+  margin-left: 125px;
+}
+
 
 .square {
   width: 100px;
@@ -76,7 +90,7 @@ body {
   display: flex;
 }
 
-.rectangular-button {
+.config-button {
   width: 50px;
   height: 30px;
   font-size: 16px;
@@ -88,18 +102,74 @@ body {
   transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
-.rectangular-button:hover {
-  background-color: #0056b3; /* Darker shade on hover */
+.config-button:hover {
+  background-color: #014996; /* Darker shade on hover */
+}
+
+.config-button-selected {
+  width: 50px;
+  height: 30px;
+  font-size: 16px;
+  background-color: #014996; /* Bootstrap primary color */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Slightly rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.reset-button {
+  background-color: #ff4d4d; /* Bright red background */
+  color: white; /* White text for contrast */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding for comfortable click area */
+  font-size: 16px; /* Font size for readability */
+  font-weight: bold; /* Bold text for emphasis */
+  border-radius: 5px; /* Slightly rounded corners */
+  cursor: pointer; /* Pointer cursor to indicate clickability */
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transitions */
+}
+
+.reset-button:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+
+.reset-button:active {
+  transform: scale(0.95); /* Slightly shrink button when clicked */
 }
 
 .score {
-  position: absolute;
-  left: 550px;
-  top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff9500; /* Red background */
+  margin-top: 5px;
+  padding: 15px;
+  border-radius: 50%; /* Circular shape */
+  display: inline-block;
+  text-align: center;
+  width: 80px;
+  height: 80px;
+  line-height: 50px; /* Align text vertically */
+  font-family: 'Arial', sans-serif;
 }
 
+.score-title {
+  border-style: solid;
+  font-weight: bold;
+  font-size: 23px;
+}
+
+
 .numMoves {
-  position: absolute;
-  left: 550px;
-  top: 50px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #3700ff; /* Green background */
+  margin-top: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for elevation */
+  display: inline-block;
+  text-align: center;
+  width: fit-content;
 }
