@@ -60,12 +60,11 @@ export default function Home() {
     }
     console.log(model.words)
     if (areArraysEqual(currentWords, model.words)) {
-      alert("CONGRATULATIONS! SCORE: " + score + " MOVES: " + moveCount)
+      alert("CONGRATULATIONS! You got a score of " + score + " in " + moveCount + " moves.")
     } else {
       alert("INCORRECT SOLUTION")
     }
   }
-
   // helper function to check if 2 arrays are equal
   function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
     // Check if lengths are different
@@ -228,7 +227,7 @@ export default function Home() {
           <button className="reset-button" style={{ width: '100%' }} onClick={() => resetConfig()}>
             RESET PUZZLE
           </button>
-          <button className="reset-button" style={{ width: '100%', backgroundColor: 'green'}} onClick={() => checkSolution()}>
+          <button className="check-button" style={{ width: '100%' }} onClick={() => checkSolution()}>
             CHECK SOLUTION
           </button>
         </div>

@@ -137,6 +137,26 @@ body {
   transform: scale(0.95); /* Slightly shrink button when clicked */
 }
 
+.check-button {
+  background-color: #30be14; /* Bright red background */
+  color: white; /* White text for contrast */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding for comfortable click area */
+  font-size: 16px; /* Font size for readability */
+  font-weight: bold; /* Bold text for emphasis */
+  border-radius: 5px; /* Slightly rounded corners */
+  cursor: pointer; /* Pointer cursor to indicate clickability */
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transitions */
+}
+
+.check-button:hover {
+  background-color: #1d9d14; /* Darker red on hover */
+}
+
+.check-button:active {
+  transform: scale(0.95); /* Slightly shrink button when clicked */
+}
+
 .score {
   font-size: 24px;
   font-weight: bold;
